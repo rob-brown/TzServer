@@ -24,14 +24,15 @@ defmodule TzServer do
          [period2 | _] <- Tzdata.periods_for_time(name, next_time, :utc) do
       cond do
         period1.std_off == 0 ->
-          %{"start" => process(period2), "end" => process(period1)}
+          %{start: process(period2), end: process(period1)}
 
         period2.std_off == 0 ->
-          %{"start" => process(period1), "end" => process(period2)}
+          %{start: process(period1), end: process(period2)}
       end
     else
       _ ->
-        nil
+        [period | _] = Tzdata.periods_for_time(name, now_in_gregorian_seconds(), :utc)
+        %{utc_off: period.utc_off}
     end
   end
 
