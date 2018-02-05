@@ -40,16 +40,8 @@ defmodule TzServer do
     :calendar.universal_time() |> :calendar.datetime_to_gregorian_seconds()
   end
 
-  defp process(period = %{from: from, until: until}) do
-    %{period | from: process(from), until: process(until)}
-  end
-
-  defp process(%{utc: utc, wall: wall, standard: standard}) do
-    %{
-      utc: gregorian_to_unix(utc),
-      wall: gregorian_to_unix(wall),
-      standard: gregorian_to_unix(standard)
-    }
+  defp process(period = %{from: %{utc: from}, until: %{utc: until}}) do
+    %{period | from: gregorian_to_unix(from), until: gregorian_to_unix(until)}
   end
 
   defp gregorian_to_unix(gregorian) do
