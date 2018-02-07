@@ -10,7 +10,21 @@ defmodule TzServer.Router do
   ## Routes
 
   get "/dst_info/all" do
-    TzServer.all_dst_info() |> Poison.encode_to_iodata!() |> send_json(conn)
+    with {:ok, new_conn} <-
+           conn
+           |> put_resp_content_type("application/json")
+           |> send_chunked(:ok)
+           |> chunk("{") do
+      TzServer.all_zone_names()
+      |> Stream.map(&[?", &1, ?", ?:, Poison.encode_to_iodata!(TzServer.dst_info(&1))])
+      |> Stream.intersperse(",")
+      |> Enum.into(new_conn)
+      |> chunk("}")
+      |> elem(1)
+    else
+      _ ->
+        send_error(conn, :internal_server_error, "Internal Error")
+    end
   end
 
   get "/dst_info/version" do

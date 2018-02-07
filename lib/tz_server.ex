@@ -9,8 +9,12 @@ defmodule TzServer do
     end
   end
 
-  def all_dst_info() do
+  def all_zone_names do
     Tzdata.zone_list()
+  end
+
+  def all_dst_info do
+    all_zone_names()
     |> Stream.map(&{&1, dst_info(&1)})
     |> Map.new()
   end
