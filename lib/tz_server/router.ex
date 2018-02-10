@@ -17,7 +17,8 @@ defmodule TzServer.Router do
            |> chunk("{") do
       TzServer.all_zone_names()
       |> Stream.map(&[?", &1, ?", ?:, Poison.encode_to_iodata!(TzServer.dst_info(&1))])
-      |> Stream.intersperse(",")
+      # |> Stream.intersperse(",")
+      |> intersperse(",")
       |> Enum.into(new_conn)
       |> chunk("}")
       |> elem(1)
@@ -85,5 +86,13 @@ defmodule TzServer.Router do
   def handle_errors(conn, error) do
     Logger.error("Request error: #{inspect(error)}")
     send_error(conn, conn.status, "Internal server error")
+  end
+
+  # `Stream.intersperse` from Elixir 1.6 (currently running 1.5.3).
+  defp intersperse(enumerable, intersperse_element) do
+    Stream.transform(enumerable, false, fn
+      element, true -> {[intersperse_element, element], true}
+      element, false -> {[element], true}
+    end)
   end
 end
