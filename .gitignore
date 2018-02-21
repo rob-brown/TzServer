@@ -23,3 +23,4 @@ erl_crash.dump
 tz_server-*.tar
 
 .DS_Store
+/timezonedata
