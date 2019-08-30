@@ -1,21 +1,20 @@
 # TzServer
 
-**TODO: Add description**
+## Deprecation Notice
 
-## Installation
+Note that Nanobox has been acquired by DigitalOcean. Their new, integrated service won't support Elixir initially. They have committed to continue supporting the existing service until ~August 2020. This service will need to be deployed to a cloud provider or ported to a different technology stack before the deprecation date.
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `tz_server` to your list of dependencies in `mix.exs`:
+## How to Deploy
 
-```elixir
-def deps do
-  [
-    {:tz_server, "~> 0.1.0"}
-  ]
-end
+1. Install [Nanobox Desktop](https://dashboard.nanobox.io/download)
+2. Checkout the code.
+3. `cd` to your code.
+4. Run the following:
+
+```bash
+nanobox remote add tzserver
+nanobox evar add PORT=8080
+nanobox deploy
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/tz_server](https://hexdocs.pm/tz_server).
-
+The environment variables should only need to be set the first time.
